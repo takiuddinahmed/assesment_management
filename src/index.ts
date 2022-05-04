@@ -1,13 +1,15 @@
-import app from "./app";
-import connectDb from "./db/mongoose";
-import dotenv from 'dotenv'
+import App from './app';
+import connectDb from './config/mongoose';
+import dotenv from 'dotenv';
+import UserModule from './modules/user/user.module';
+import AssessmentModule from './modules/assessment/assessment.module';
+1;
 dotenv.config();
 
-const port = process.env.PORT || 3500
+const port = process.env.PORT || 3500;
 
 connectDb();
 
+const app = new App([new UserModule(), new AssessmentModule()]);
 
-app.listen(port, ()=>{
-    console.log(`server started on port ${port}`)
-})
+app.listen();
