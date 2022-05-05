@@ -5,7 +5,7 @@ interface ReqWithUser extends Request {
     user?: ReqUser;
 }
 
-interface ReqUser {
+export interface ReqUser {
     _id: string;
     role: UserRole;
 }

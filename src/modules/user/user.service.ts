@@ -1,9 +1,11 @@
 import { compare, hash } from 'bcrypt';
 import HttpException from '../../exceptions/http.exception';
+import ServerException from '../../exceptions/server.exception';
 import WrongCredentialException from '../../exceptions/wrongCredential.exception';
 import { TokenType } from '../../interfaces/jwtToken.interface';
 import Service from '../../interfaces/service';
 import { issueToken } from '../../utils/jwt';
+import EditUserDto from './dto/editUser.dto';
 import LoginDto from './dto/login.dto';
 import RegisterDto from './dto/register.dto';
 import User from './user.interface';
@@ -22,7 +24,7 @@ class UserService implements Service {
                 password: hashedPass,
             });
 
-            const newUserData = await newUser.save();
+            return await newUser.save();
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
@@ -50,15 +52,41 @@ class UserService implements Service {
         }
     };
 
+    public getAllUser = async () => {
+        try {
+            return await this.userModel.find();
+        } catch (error) {
+            throw new ServerException();
+        }
+    };
+    public editUser = async (editUserData: EditUserDto) => {
+        try {
+            return await this.userModel.findByIdAndUpdate(
+                editUserData.id,
+                editUserData,
+                { new: true }
+            );
+        } catch (error) {
+            throw new ServerException();
+        }
+    };
+    public deleteUser = async (userId: string) => {
+        try {
+            return await this.userModel.findByIdAndDelete(userId);
+        } catch (error) {
+            throw new ServerException();
+        }
+    };
+
     private getToken = async (newUserData: User) => {
-        const refressToken = issueToken(
-            {
-                _id: newUserData._id,
-                role: newUserData.userRole,
-                tokenType: TokenType.REFRESH,
-            },
-            '180d'
-        );
+        // const refressToken = issueToken(
+        //     {
+        //         _id: newUserData._id,
+        //         role: newUserData.userRole,
+        //         tokenType: TokenType.REFRESH,
+        //     },
+        //     '180d'
+        // );
         const accessToken = issueToken(
             {
                 _id: newUserData._id,
@@ -68,11 +96,11 @@ class UserService implements Service {
             '1d'
         );
 
-        await this.userModel.findOneAndUpdate(
-            { _id: newUserData._id },
-            { $push: { refreshTokens: refressToken } }
-        );
-        return { refressToken, accessToken };
+        // await this.userModel.findOneAndUpdate(
+        //     { _id: newUserData._id },
+        //     { $push: { refreshTokens: refressToken } }
+        // );
+        return { accessToken };
     };
 }
 

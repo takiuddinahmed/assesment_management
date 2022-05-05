@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, IsUrl } from "class-validator";
 
-export class CreateDto {
+export class CreateSubmissionDto {
     @IsUrl()
     link: string
 

@@ -18,14 +18,32 @@ class AssessmentController implements Controller {
     }
 
     public initRoutes() {
+        this.router.get('/', this.get);
         this.router.post(
             '/',
             checkRoles([UserRole.MENTOR, UserRole.ADMIN]),
             this.create
         );
         this.router.put('/', checkRoles([UserRole.ADMIN]), this.edit);
-        this.router.delete('/:documentId', checkRoles([UserRole.ADMIN]), this.delete);
+        this.router.delete(
+            '/:documentId',
+            checkRoles([UserRole.ADMIN]),
+            this.delete
+        );
     }
+
+    private get = async (
+        req: ReqWithUser,
+        res: Response,
+        next: NextFunction
+    ) => {
+        try {
+            const resData = await this.service.get();
+            res.send(resData);
+        } catch (error) {
+            next(error);
+        }
+    };
 
     private create = async (
         req: ReqWithUser,
@@ -77,7 +95,6 @@ class AssessmentController implements Controller {
             next(err);
         }
     };
-
 }
 
 export default AssessmentController;

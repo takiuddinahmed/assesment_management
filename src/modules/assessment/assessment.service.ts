@@ -10,6 +10,15 @@ import EditDto from './dto/edit.dto';
 
 class AssessmentService implements Service {
     private assessmentModel = assessmentModel;
+
+    public get = async () => {
+        try {
+            return await this.assessmentModel.find();
+        } catch (error) {
+            throw new ServerException();
+        }
+    };
+
     public create = async (createData: CreateDto, mentorId: string) => {
         try {
             const newAss = await assessmentModel.create({
@@ -35,7 +44,8 @@ class AssessmentService implements Service {
         try {
             return await assessmentModel.findByIdAndUpdate(
                 editData.id,
-                editData
+                editData,
+                { new: true }
             );
         } catch (err) {
             console.log(err);
