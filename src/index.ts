@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import UserModule from './modules/user/user.module';
 import AssessmentModule from './modules/assessment/assessment.module';
 import SubmissionModule from './modules/submission/submission.module';
-1;
+
 dotenv.config();
 
 const port = process.env.PORT || 3500;
