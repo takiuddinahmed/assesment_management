@@ -1,8 +1,9 @@
-
 enum UserRole {
-    STUDENT = 'student',
-    MENTOR ='mentor',
-    ADMIN = 'admin'
+  PATIENT = "patient",
+  LAB = "lab",
+  DOCTOR = "doctor",
+  PHARMACY = "pharmacy",
+  ADMIN = "admin",
 }
 
 export default UserRole;

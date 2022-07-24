@@ -25,4 +25,9 @@ export default class EditUserDto {
     @ValidateIf((o,v)=>v!=null)
     public userRole: UserRole;
 
+    @IsString()
+    @MinLength(3)
+    @ValidateIf((o,v)=>v!=null)
+    public rfid: string;
+
 }
